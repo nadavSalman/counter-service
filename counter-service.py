@@ -14,5 +14,4 @@ def index():
      """displaying the counter after converting it to a string"""   
      return str(counter)
 if __name__ == '__main__':
-#exposing the service on port 80
     app.run(debug=True,port=80)
