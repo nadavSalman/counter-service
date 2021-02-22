@@ -5,13 +5,13 @@ app = Flask(__name__)
 counter = 0
 @app.before_request
 def before_request():
-    """handeling the request before the route path"""
+    """Hmmm, Plus 1 please"""
     global counter
     if request.method=='POST':
         counter+=1
 @app.route('/')
 def index():
-     """displaying the counter after converting it to a string"""   
+     """Our counter is..."""   
      return str(counter)
 if __name__ == '__main__':
     app.run(debug=True,port=80)
