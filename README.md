@@ -50,7 +50,22 @@ Send to me an SCM Merge / pull Request for code review - from your branch to mas
 Provisioning Infrastructure 
 - [ ] Create EKS using Terraform
 
+---
 
+![alt text](images/image_01.png)
+
+
+<br/>
+<br/>
+<br/>
+
+
+![alt text](images/image_02.png)
+
+
+
+
+---
 
 
 
@@ -61,11 +76,12 @@ Provisioning Infrastructure
 
 
 ---
-
-
+### Export kubeconifg
+```bash
+aws eks update-kubeconfig --region us-east-1 --name infinity
+```
 --
 
-## Why do AWS recommend public and private subnets with a nat gateway?
 
 
 --
@@ -90,7 +106,47 @@ Provisioning Infrastructure
 
 
 
+# 403
 
+```
+Plan: 16 to add, 0 to change, 0 to destroy.
+module.K8sInfra.aws_eip.nat: Creating...
+module.K8sInfra.aws_vpc.main: Creating...
+╷
+│ Error: Error creating EIP: UnauthorizedOperation: You are not authorized to perform this operation. User: arn:aws:iam::630943284793:user/nadavops@gmail.com is not authorized to perform: ec2:AllocateAddress on resource: arn:aws:ec2:us-east-1:630943284793:elastic-ip/* because no identity-based policy allows the ec2:AllocateAddress action. Encoded authorization failure message: LFKgZ-6vRe92Bt2SLH84UQGBPJUTPs8oDvZyKm2WgGmGi6J0etYeX0NN3pwe5bmPttEzVW7PqAjkUf4_hkL0hG_cAtGjY4iZlSgBm3xprphVUAZtazzUBqib9Dk0Dq9dSxVHDqpYqSIiYdHKPQfEJfoGBwKsLrQEBsEx8392ZbybVs84omnBhO31_EN_kHemwTftyQ_wdcOBZnpJFUm6KfL7keGrl62uuYsrDPfbTvqAWpMAHf9bzvfy9oRmSLyT0Jr8JZIZ_nCjWQFTM4oHj8wS-G_gNONqDDVoQyXD4ZFcdz1gh_bwP4BJmwE7UKhLIWEtbprxDJmk_YSA5GP5yGXg4MfkKlbRcLub0aROthYCXcd-YGVA7e8-xNKrXBYPtUKg3DI3icw3kRo3A2XdSzbsbuBbuaxtBlth_s7K-bGx7kxcJ5BMM9huoEPgL-sVWA4lZ-nRkaMdNbX6Lguq4JQAMaABFZGHNrQMW3BGGRdYf1YSpw_bbKFAQiH9RjCl9cbk45MlrT0hesEUWp6n
+│       status code: 403, request id: 51634e8a-0f88-43ed-96e5-be9259d7121b
+│ 
+│   with module.K8sInfra.aws_eip.nat,
+│   on modules/eks/nat.tf line 1, in resource "aws_eip" "nat":
+│    1: resource "aws_eip" "nat" {
+│ 
+╵
+╷
+│ Error: error creating EC2 VPC: UnauthorizedOperation: You are not authorized to perform this operation. User: arn:aws:iam::630943284793:user/nadavops@gmail.com is not authorized to perform: ec2:CreateVpc on resource: arn:aws:ec2:us-east-1:630943284793:vpc/* because no identity-based policy allows the ec2:CreateVpc action. Encoded authorization failure message: z621hbjSx4hBLBUr3KpJsJZvsZ0HNLeYDQ3n7qJaqR2f0D3YdbE-nwg2o5vDizW54rHpo90lCZ51XzNMpXgem5h_tzuyz4jeagop-_Wm-lOufc0GibIpjJUrMcFdcNjBnGFKU-8rG1VNd2hshBxZJ9KXStL_5wdAdhDWKCTvMYaQvURgEkAbzuP-KLO26cxFl-qvnTF1C9Wp326-PLHD5SSlwTFhxBCHdqL_pt4dl89EumQ_g2ESPTLUIAbopG5hV-SdNnN_YZ7WgQjW3Tx8Apq3h9mzqSYfnrq0z3LYZTbPjhqeRsj_M2bf4SCB6Cr-rJEP9xeu9-bWfQJIrZTXxxA23RKXes4Vd1xOT9s2pM5in25LmZK8z0Sglk7JVyBLF2nPJKPK73hb4N7m1eJUO4wRx_I5VAbZAy13GFU3zKA_BK0fwvHswyHIf1ENSXJh9OGRatBfzJZS2A4u4DoFzLSjC1l2ZjDDcpV7j3UQnD_4aNMTGeUjSIeTQCLeoo9nZYKYzdLiE3T43Hg
+│       status code: 403, request id: 96320531-bdae-44c0-8555-f65694b80f32
+│ 
+│   with module.K8sInfra.aws_vpc.main,
+│   on modules/eks/vpc.tf line 1, in resource "aws_vpc" "main":
+│    1: resource "aws_vpc" "main" {
+│ 
+╵
+
+counter-service/cluster-provisioning/terraform on  dev [!?] via 💠 default on ☁️  (us-east-1) took 13s 
+❯ 
+```
+
+
+```
+module.K8sInfra.aws_vpc.main: Creating...
+╷
+│ Error: error creating EC2 VPC: UnauthorizedOperation: You are not authorized to perform this operation. User: arn:aws:iam::630943284793:user/nadavops@gmail.com is not authorized to perform: ec2:CreateVpc on resource: arn:aws:ec2:us-east-1:630943284793:vpc/* because no identity-based policy allows the ec2:CreateVpc action. Encoded authorization failure message: aVuwP1GXOf4acc-Y0_PrSv1NR7cDwRzrSux5Ja0zySePvO-sTAYNjhSFz827iXn4R9ZFDoFwy0BNVDKEs9802QEoA7UKXWDfmSVVIYkxZnrqX-NAeNb8FgWupb2nX-75lJ5DYFmgNyXDYYAsk_QKvzavmhOr14cjrkKGm-cGTZuPfYn4b2KhwHpbhdMmqdAllqyaglFlTEguDyiEBbtTTBHKX-rzHLr2N94t63-4Oc4Uk2sUTj993zI3lVKWNlkMiAUGLH6LeYYBKVf0oLl6cZuS2FGossFxpWXqSImp2E7YsDOfZJcJpItJbcnsTeFQXUJYv3u36PDGE6rD3VndmdxVfV1j5Nhk9gzpPw5c8AttiV97KNZ19ug7FRz1i1WhMrMBcFAcg2BvmKQXzC4MSlMh6jpBh0O0QTWxbKQuTWQsi-31f4wgmHMqHIDj2_PDm4lUm_2v1cRO_Z5lwH50TqrZFj9UyO7joFF7mQ7QiE5zXqcEl2jmDA31OVU-JJ4d-kP5BEAb7Q4z9dk
+│       status code: 403, request id: 142edc42-9766-492c-a1fb-c23efe6c20e0
+│ 
+│   with module.K8sInfra.aws_vpc.main,
+│   on modules/eks/vpc.tf line 1, in resource "aws_vpc" "main":
+│    1: resource "aws_vpc" "main" {
+│ 
+```
 
 
 
