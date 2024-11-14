@@ -1,32 +1,27 @@
-# pv
----
+
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: existing-ebs-pv
+  name: efs-pv
 spec:
   capacity:
-    storage: 20Gi 
+    storage: 5Gi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce 
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: gp2 
-  awsElasticBlockStore:
-    volumeID: vol-05d5a8bb8ec96c7b1
-    fsType: ext4  
+  storageClassName: efs-sc
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-018c732995a664337
 
 ---
-# pv
-apiVersion: v1
-kind: PersistentVolumeClaim
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
 metadata:
-  name: existing-ebs-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: gp2
-  resources:
-    requests:
-      storage: 1Gi 
-    
+  name: efs-sc
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: fs-018c732995a664337
+  directoryPerms: "777"

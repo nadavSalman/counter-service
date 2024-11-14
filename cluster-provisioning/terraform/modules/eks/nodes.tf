@@ -13,31 +13,31 @@ resource "aws_iam_role" "nodes" {
   })
 }
 
-# resource "aws_iam_policy" "node_efs_policy" {
-#   name        = "eks_node_efs"
-#   path        = "/"
-#   description = "Policy for EFKS nodes to use EFS"
+resource "aws_iam_policy" "node_efs_policy" {
+  name        = "eks_node_efs"
+  path        = "/"
+  description = "Policy for EFKS nodes to use EFS"
 
-#   policy = jsonencode({
-#     "Statement": [
-#         {
-#             "Action": [
-#                 "elasticfilesystem:DescribeMountTargets",
-#                 "elasticfilesystem:DescribeFileSystems",
-#                 "elasticfilesystem:DescribeAccessPoints",
-#                 "elasticfilesystem:CreateAccessPoint",
-#                 "elasticfilesystem:DeleteAccessPoint",
-#                 "ec2:DescribeAvailabilityZones"
-#             ],
-#             "Effect": "Allow",
-#             "Resource": "*",
-#             "Sid": ""
-#         }
-#     ],
-#     "Version": "2012-10-17"
-# }
-#   )
-# }
+  policy = jsonencode({
+    "Statement": [
+        {
+            "Action": [
+                "elasticfilesystem:DescribeMountTargets",
+                "elasticfilesystem:DescribeFileSystems",
+                "elasticfilesystem:DescribeAccessPoints",
+                "elasticfilesystem:CreateAccessPoint",
+                "elasticfilesystem:DeleteAccessPoint",
+                "ec2:DescribeAvailabilityZones"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Sid": ""
+        }
+    ],
+    "Version": "2012-10-17"
+}
+  )
+}
 
 resource "aws_iam_role_policy_attachment" "nodes-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
@@ -54,10 +54,10 @@ resource "aws_iam_role_policy_attachment" "nodes-AmazonEC2ContainerRegistryReadO
   role       = aws_iam_role.nodes.name
 }
 
-# resource "aws_iam_role_policy_attachment" "nodes-node_efs_policy" {
-#   policy_arn = aws_iam_policy.node_efs_policy.arn
-#   role       = aws_iam_role.nodes.name
-# }
+resource "aws_iam_role_policy_attachment" "nodes-node_efs_policy" {
+  policy_arn = aws_iam_policy.node_efs_policy.arn
+  role       = aws_iam_role.nodes.name
+}
 
 resource "aws_eks_node_group" "private-nodes" {
   cluster_name    = aws_eks_cluster.infinity.name
@@ -65,12 +65,13 @@ resource "aws_eks_node_group" "private-nodes" {
   node_role_arn   = aws_iam_role.nodes.arn
 
   
+  
 
   subnet_ids = [
     aws_subnet.private-eu-west-2a.id,
-    aws_subnet.private-eu-west-2b.id,
+    # aws_subnet.private-eu-west-2b.id,
 
-    aws_subnet.public-eu-west-2a.id,
+    # aws_subnet.public-eu-west-2a.id,
     aws_subnet.public-eu-west-2b.id
   ]
 

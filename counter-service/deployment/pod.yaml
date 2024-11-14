@@ -1,17 +1,38 @@
 apiVersion: v1
-kind: Pod
+kind: PersistentVolumeClaim
 metadata:
-  name: ebs-app
+  name: myvolume
 spec:
-  containers:
-  - name: app
-    image: centos
-    command: ["/bin/sh"]
-    args: ["-c", "while true; do echo $(date -u) >> /data/out.txt; sleep 2; done"]
-    volumeMounts:
-    - name: persistent-storage
-      mountPath: /data
-  volumes:
-  - name: persistent-storage
-    persistentVolumeClaim:
-      claimName: existing-ebs-pvc
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-sc
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: website
+  template:
+    metadata:
+      labels:
+        app: website
+    spec:
+      containers:
+        - name: website
+          image: wordpress:latest
+          volumeMounts:   
+            - name: myvolume
+              mountPath: /var/www/html/wp-content/uploads
+              subPath: uploads
+
+      volumes:
+        - name: myvolume
+          persistentVolumeClaim:
+              claimName: myvolume
