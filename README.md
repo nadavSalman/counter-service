@@ -47,8 +47,25 @@ The url to your "counter-service", on port 80.
 Send to me an SCM Merge / pull Request for code review - from your branch to master, containing all of the code for this exercise. The Merge-Request should contain a short description of your changes, and any other comment you’d like us to know of.
 
 ---
-Provisioning Infrastructure 
-- [ ] Create EKS using Terraform
+
+Action Items
+
+
+* Provisioning Infrastructure 
+    - [ X ] Create EKS using Terraform
+    - [ X ] Test cluster acess
+ 
+* Counter Service
+    - [ ] Improve code
+    - [ ] Dockerise
+    - [ ] Wratp with Helm
+    - [ ] Local Deploymetn test 
+
+* CI/CD infra
+    - [ ] CI - Continer build & publish
+    - [ ] CD - Deploy to via Helm to EKS 
+
+
 
 ---
 
@@ -78,9 +95,92 @@ Provisioning Infrastructure
 ---
 ### Export kubeconifg
 ```bash
-aws eks update-kubeconfig --region us-east-1 --name infinity
+aws eks update-kubeconfig --region eu-west-2 --name infinity
 ```
 --
+
+
+### EKS Persistent storage for Maintaining County State 
+
+
+View Storage Class 
+```yaml
+~ on ☁️  (eu-west-2)
+❯ aws ec2 describe-volumes --query 'Volumes[*].[VolumeId,Size,State,VolumeType,AvailabilityZone,CreateTime]' --output table
+----------------------------------------------------------------------------------------------------
+|                                          DescribeVolumes                                         |
++------------------------+-----+---------+------+-------------+------------------------------------+
+|  vol-05d5a8bb8ec96c7b1 |  20 |  in-use |  gp3 |  eu-west-2a |  2024-11-14T12:23:23.566000+00:00  |
++------------------------+-----+---------+------+-------------+------------------------------------+
+
+~ on ☁️  (eu-west-2)
+❯ k get sc
+NAME   PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+gp2    kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   false                  5h27m
+
+~ on ☁️  (eu-west-2) took 3s
+❯ k get sc -o yaml
+apiVersion: v1
+items:
+- apiVersion: storage.k8s.io/v1
+  kind: StorageClass
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{},"name":"gp2"},"parameters":{"fsType":"ext4","type":"gp2"},"provisioner":"kubernetes.io/aws-ebs","volumeBindingMode":"WaitForFirstConsumer"}
+    creationTimestamp: "2024-11-14T12:20:28Z"
+    name: gp2
+    resourceVersion: "270"
+    uid: 68325613-dbca-42a9-8a1e-fd6945a8aefa
+  parameters:
+    fsType: ext4
+    type: gp2
+  provisioner: kubernetes.io/aws-ebs
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
+kind: List
+metadata:
+  resourceVersion: ""
+
+~ on ☁️  (eu-west-2)
+❯
+```
+
+PV & PVC 
+```yaml
+# pv
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: existing-ebs-pv
+spec:
+  capacity:
+    storage: 20Gi 
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: gp2 
+  awsElasticBlockStore:
+    volumeID: vol-05d5a8bb8ec96c7b1
+    fsType: ext4  
+
+---
+# pv
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: existing-ebs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: gp2
+  resources:
+    requests:
+      storage: 1Gi 
+```
+
 
 
 

@@ -1,0 +1,32 @@
+# pv
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: existing-ebs-pv
+spec:
+  capacity:
+    storage: 20Gi 
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: gp2 
+  awsElasticBlockStore:
+    volumeID: vol-05d5a8bb8ec96c7b1
+    fsType: ext4  
+
+---
+# pv
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: existing-ebs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: gp2
+  resources:
+    requests:
+      storage: 1Gi 
+    

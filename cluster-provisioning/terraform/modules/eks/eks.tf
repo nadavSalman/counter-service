@@ -33,16 +33,19 @@ resource "aws_eks_cluster" "infinity" {
   name     = var.cluster_name
   role_arn = aws_iam_role.infinity.arn
 
-  # upgrade_policy {
-  #   support_type = "STANDARD"
-  # }
+  
+  
+
+  upgrade_policy {
+    support_type = "STANDARD"
+  }
 
   vpc_config {
     subnet_ids = [
-      # aws_subnet.private-us-east-1a.id,
-      # aws_subnet.private-us-east-1b.id,
-      aws_subnet.public-us-east-1a.id,
-      aws_subnet.public-us-east-1b.id
+      aws_subnet.private-eu-west-2a.id,
+      aws_subnet.private-eu-west-2b.id,
+      aws_subnet.public-eu-west-2a.id,
+      aws_subnet.public-eu-west-2b.id
     ]
   }
 
