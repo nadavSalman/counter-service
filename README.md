@@ -59,7 +59,7 @@ Send to me an SCM Merge / pull Request for code review - from your branch to mas
 * Counter Service
     - [x] Improve code
     - [x] Dockerise
-    - [] Wratp with Helm
+    - [ ] Wratp with Helm
     - [ ] Local Deploymetn test 
 
 * CI/CD infra

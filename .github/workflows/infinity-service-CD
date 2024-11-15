@@ -45,3 +45,6 @@ jobs:
           push: true
           file: "counter-service/Dockerfile"
           tags: ${{ steps.meta.outputs.tags }}
+
+
+          
