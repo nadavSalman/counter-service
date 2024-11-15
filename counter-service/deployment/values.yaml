@@ -20,13 +20,13 @@ livenessProbe:
 readinessProbe:
   httpGet:
     path: /
-    port: http
+    port: 5000
 
 
 service:
   type: ClusterIP
-  port: 80
-  targetPort: 5000
+  port: 5000
+  targetPort: 80
 
 
 ingress:
