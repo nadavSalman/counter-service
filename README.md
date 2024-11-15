@@ -59,12 +59,12 @@ Send to me an SCM Merge / pull Request for code review - from your branch to mas
 * Counter Service
     - [x] Improve code
     - [x] Dockerise
-    - [ ] Wratp with Helm
-    - [ ] Local Deploymetn test 
+    - [x] Wratp with Helm
+    - [x] Local Deploymetn test 
 
 * CI/CD infra
-    - [ ] CI - Continer build & publish
-    - [ ] CD - Deploy to via Helm to EKS 
+    - [x] CI - Continer build & publish
+    - [x] CD - Deploy to via Helm to EKS 
 
 
 
