@@ -8,7 +8,7 @@ on:
       - "v*.*.*"
 
 jobs:
-  build:
+  CI:
     runs-on: ubuntu-latest
     env:
       CI: false
@@ -47,5 +47,35 @@ jobs:
           push: true
           file: "counter-service/Dockerfile"
           tags: ${{ steps.meta.outputs.tags }}
+
+      
+  CD:
+    runs-on: ubuntu-latest
+    needs: [CI]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+    
+      - name: Helm Upgrade-Install
+        run: |
+          
+          pwd
+          ls -la
+
+          # Depndency cli's
+          aws --version 
+          kubectl version 
+          helm version
+
+
+
+          # helm template restaurants-app ./RestaurantApp/helm/restaurants-app \
+          #   -f ./Provision-Infrastructure/modules/DeploymentPrep/prep_deployment.yaml \
+          #   --set image.tag="${{ needs.CI.outputs.image_tag }}"
+
+          # helm upgrade --install restaurants-app ./RestaurantApp/helm/restaurants-app \
+          #   -f ./Provision-Infrastructure/modules/DeploymentPrep/prep_deployment.yaml \
+          #   --set image.tag="${{ needs.CI.outputs.image_tag }}"
+              
 
 

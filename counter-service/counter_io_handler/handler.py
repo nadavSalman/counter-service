@@ -14,7 +14,7 @@ class CounterIOHandler:
             with open(self.file_path, "r") as f:
                 try:
                     # current_app.logger.info("Successfully read counter file {self.file_path}")
-                    print("Successfully read counter file {self.file_path}")
+                    print(f"Successfully read counter file {self.file_path}")
                     return int(f.read()) # str -> int ...
                 except Exception as e:
                     # current_app.logger.info(f"Failed to read counter file {self.file_path}, error : {ValueError}")
