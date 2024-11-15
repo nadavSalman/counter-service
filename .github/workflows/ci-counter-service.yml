@@ -64,8 +64,7 @@ jobs:
 
           # Depndency cli's
           aws --version 
-          kubectl version 
-          helm version
+     
 
 
 
