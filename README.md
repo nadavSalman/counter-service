@@ -54,6 +54,7 @@ Send to me an SCM Merge / pull Request for code review - from your branch to mas
 * Provisioning Infrastructure 
     - [x] Create EKS using Terraform
     - [x] Test cluster acess
+    - [x] Nginx ingress Contoller
  
 * Counter Service
     - [x] Improve code
