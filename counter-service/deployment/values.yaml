@@ -15,7 +15,7 @@ serviceAccount:
 livenessProbe:
   httpGet:
     path: /
-    port: http
+    port: 5000
 
 readinessProbe:
   httpGet:
