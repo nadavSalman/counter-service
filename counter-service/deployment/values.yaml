@@ -12,6 +12,17 @@ serviceAccount:
   create: true
   automount: true
 
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+
 service:
   type: ClusterIP
   port: 80
@@ -43,7 +54,7 @@ volumes:
 
 volumeMounts:
   - name: efs-volume
-    mountPath: /app/counter.txt
+    mountPath: /app
     subPath: counter.txt
 
 nodeSelector: {}
