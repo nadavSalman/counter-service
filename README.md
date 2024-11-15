@@ -258,6 +258,21 @@ Thu Nov 14 23:21:08 UTC 2024
 
 
 
+```
+❯ helm get manifest counter-service -n prod  | grep kind: 
+kind: ServiceAccount
+kind: PersistentVolume
+kind: PersistentVolumeClaim
+kind: Service
+kind: Deployment
+kind: HorizontalPodAutoscaler
+    kind: Deployment
+kind: Ingress
+kind: Pod
+
+```
+
+
 ### Addressing General Guidelines
 
 * operational use cases from the real, service crashes
