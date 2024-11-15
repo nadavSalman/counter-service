@@ -48,17 +48,17 @@ Send to me an SCM Merge / pull Request for code review - from your branch to mas
 
 ---
 
-Action Items
+### Action Items
 
 
 * Provisioning Infrastructure 
-    - [ X ] Create EKS using Terraform
-    - [ X ] Test cluster acess
+    - [x] Create EKS using Terraform
+    - [x] Test cluster acess
  
 * Counter Service
-    - [ ] Improve code
-    - [ ] Dockerise
-    - [ ] Wratp with Helm
+    - [x] Improve code
+    - [x] Dockerise
+    - [] Wratp with Helm
     - [ ] Local Deploymetn test 
 
 * CI/CD infra
@@ -69,6 +69,12 @@ Action Items
 
 ---
 
+<br/>
+<br/>
+<br/>
+
+
+Deployment Architecture :
 ![alt text](images/image_01.png)
 
 
@@ -76,7 +82,7 @@ Action Items
 <br/>
 <br/>
 
-Terraform 
+Terraform Architecture
 ![alt text](images/image_02.png)
 
 
