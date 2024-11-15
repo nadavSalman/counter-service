@@ -253,6 +253,10 @@ Thu Nov 14 23:21:08 UTC 2024
 
 ![alt text](images/image_03.png)
 --
+### GitHub action CI/CD
+![alt text](images/image_04.png)
+
+
 
 ### Addressing General Guidelines
 
@@ -269,7 +273,7 @@ Thu Nov 14 23:21:08 UTC 2024
     - Resource Management and Scaling
         - Resource Limit 
         - HPA
-        - Scale cluster compute : Cluster Autoscaler
+        - Scale cluster compute : Cluster Autoscaler (Not implemented yet ...)
 
 
 

@@ -6,7 +6,7 @@ image:
   tag: dev
 
 imagePullSecrets:
- - dockerhub-pull-secret
+  - name: dockerhub-pull-secret
 
 serviceAccount:
   create: true
