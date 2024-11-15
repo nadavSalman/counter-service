@@ -1,4 +1,4 @@
-name: CI Counter Service
+name: CI/CD Counter Service
 
 on:
   push:
@@ -52,6 +52,11 @@ jobs:
   CD:
     runs-on: ubuntu-latest
     needs: [CI]
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+  
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -64,17 +69,10 @@ jobs:
 
           # Depndency cli's
           aws --version 
+          aws eks update-kubeconfig --region eu-west-2 --name infinity
+          kubectl cluster-info
+
+          helm upgrade --install counter-service k8s-deployment/infinity-service/ \
+            --values counter-service/deployment/values.yaml \
+            --set image.tag="${{ needs.CI.outputs.image_tag }}"
      
-
-
-
-          # helm template restaurants-app ./RestaurantApp/helm/restaurants-app \
-          #   -f ./Provision-Infrastructure/modules/DeploymentPrep/prep_deployment.yaml \
-          #   --set image.tag="${{ needs.CI.outputs.image_tag }}"
-
-          # helm upgrade --install restaurants-app ./RestaurantApp/helm/restaurants-app \
-          #   -f ./Provision-Infrastructure/modules/DeploymentPrep/prep_deployment.yaml \
-          #   --set image.tag="${{ needs.CI.outputs.image_tag }}"
-              
-
-

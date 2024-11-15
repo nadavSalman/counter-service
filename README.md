@@ -248,6 +248,11 @@ Thu Nov 14 23:21:08 UTC 2024
 ```
 
 --
+### Counter file local continer test 
+
+
+![alt text](images/image_03.png)
+--
 
 ### Addressing General Guidelines
 

@@ -41,8 +41,10 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
+            periodSeconds: 360
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
+            periodSeconds: 360
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
