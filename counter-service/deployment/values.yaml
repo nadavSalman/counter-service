@@ -5,7 +5,8 @@ image:
   pullPolicy: IfNotPresent
   tag: dev
 
-imagePullSecrets: []
+imagePullSecrets:
+ - dockerhub-pull-secret
 
 serviceAccount:
   create: true
