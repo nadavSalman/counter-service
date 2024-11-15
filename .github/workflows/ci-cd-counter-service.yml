@@ -74,7 +74,7 @@ jobs:
 
           helm upgrade --install counter-service k8s-deployment/infinity-service/ \
             --values counter-service/deployment/values.yaml \
-            --set image.tag="${{ needs.CI.outputs.image_tag }}" \
+            --set image.tag="dev" \
             -n prod \
             --create-namespace
               
