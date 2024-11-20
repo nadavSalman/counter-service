@@ -5,5 +5,7 @@ COPY counter-service/ /app/
 
 RUN pip install -r requirements.txt
 COPY counter-service/ /app
-ENV FLASK_APP=/app/counter-service/app.py
-CMD [ "python3", "-m" ,  "flask", "run"]
+# ENV FLASK_APP=/app/counter-service/app.py
+
+ENV FLASK_APP=app.py
+CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
