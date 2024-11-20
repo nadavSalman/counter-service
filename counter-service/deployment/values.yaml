@@ -24,7 +24,7 @@ readinessProbe:
 
 service:
   type: ClusterIP
-  port: 80
+  port: 5000
   targetPort: 5000
 
 
@@ -48,12 +48,12 @@ resources:
     memory: 128Mi
 
 volumes:
-  - name: efs-volume
+  - name: counter-volume
     persistentVolumeClaim:
-      claimName: efs-claim
+      claimName: local-path-pvc
 
 volumeMounts:
-  - name: efs-volume
+  - name: counter-volume
     mountPath: /app
     subPath: counter.txt
 
@@ -64,10 +64,10 @@ tolerations: []
 affinity: {}
 
 
-efs:
-  csi:
-    driver: efs.csi.aws.com
-    volumeHandle: fs-04c766103518e0935
+# efs:
+#   csi:
+#     driver: efs.csi.aws.com
+#     volumeHandle: fs-04c766103518e0935
 
 
 autoscaling:
