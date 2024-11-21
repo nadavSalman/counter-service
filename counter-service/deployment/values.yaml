@@ -13,19 +13,22 @@ serviceAccount:
   automount: true
 
 livenessProbe:
+  timeoutSeconds: 120
   httpGet:
     path: /
     port: 5000
 readinessProbe:
+  timeoutSeconds: 120
   httpGet:
     path: /
     port: 5000
+
+
 
 
 service:
   type: ClusterIP
   port: 5000
-  targetPort: 5000
 
 
 ingress:
@@ -47,15 +50,15 @@ resources:
     cpu: 100m
     memory: 128Mi
 
-volumes:
-  - name: counter-volume
-    persistentVolumeClaim:
-      claimName: local-path-pvc
+# volumes:
+#   - name: counter-volume
+#     persistentVolumeClaim:
+#       claimName: local-path-pvc
 
-volumeMounts:
-  - name: counter-volume
-    mountPath: /app
-    subPath: counter.txt
+# volumeMounts:
+#   - name: counter-volume
+#     mountPath: /app
+#     subPath: counter.txt
 
 nodeSelector: {}
 
@@ -71,6 +74,6 @@ affinity: {}
 
 
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 1
   maxReplicas: 5

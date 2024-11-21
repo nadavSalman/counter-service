@@ -1,0 +1,56 @@
+# Source: infinity-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-service-infinity-service-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: infinity-service
+      app.kubernetes.io/instance: counter-service
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: infinity-service-0.1.0
+        app.kubernetes.io/name: infinity-service
+        app.kubernetes.io/instance: counter-service
+        app.kubernetes.io/version: "1.16.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      imagePullSecrets:
+        - name: dockerhub-pull-secret
+      containers:
+        - name: infinity-service
+          image: "nadavdev/counter-service:sha-d464d10"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          volumeMounts:
+            - mountPath: /app
+              name: counter-volume
+              subPath: counter.txt
+      volumes:
+        - name: counter-volume
+          persistentVolumeClaim:
+            claimName: local-path-pvc

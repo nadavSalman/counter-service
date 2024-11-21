@@ -1,0 +1,102 @@
+containers:
+  - image: nadavdev/counter-service:sha-633f19e
+    imagePullPolicy: Always
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /
+        port: 5000
+        scheme: HTTP
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    name: infinity-service
+    ports:
+      - containerPort: 5000
+        name: http
+        protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /
+        port: 5000
+        scheme: HTTP
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    securityContext: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+      - mountPath: /app
+        name: counter-volume
+        subPath: counter.txt
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-8kxj9
+        readOnly: true
+dnsPolicy: ClusterFirst
+enableServiceLinks: true
+imagePullSecrets:
+  - name: dockerhub-pull-secret
+nodeName: kind-control-plane
+preemptionPolicy: PreemptLowerPriority
+priority: 0
+restartPolicy: Always
+schedulerName: default-scheduler
+securityContext: {}
+serviceAccount: counter-service-infinity-service
+serviceAccountName: counter-service-infinity-service
+terminationGracePeriodSeconds: 30
+tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+volumes:
+  - name: counter-volume
+    persistentVolumeClaim:
+      claimName: local-path-pvc
+  - name: kube-api-access-8kxj9
+    projected:
+      defaultMode: 420
+      sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+              - key: ca.crt
+                path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+              - fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+                path: namespace
+
+
+
+
+
+VlauesYaml:
+  volumes:
+    - name: counter-volume
+      persistentVolumeClaim:
+        claimName: local-path-pvc
+
+  volumeMounts:
+    - name: counter-volume
+      mountPath: /app
+      subPath: counter.txt
