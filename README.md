@@ -105,8 +105,9 @@ aws eks update-kubeconfig --region eu-west-2 --name infinity
 ```
 ---
 ## Deploymetn on Kind Cluster
+pv,pvc : `cluster-provisioning/rancher.io-local-path/demo`
 
-Test local storage (rancher.io/local-path )
+### Test local storage (rancher.io/local-path )
 
 ```bash
 on kind-kind counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
@@ -132,12 +133,124 @@ on kind-kind counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv)
 ![alt text](images/image_05.png)
 
 
+### Counter Service Demo :
+<br/>
+<br/>
+Service ir runnig :
+
+```bash
+counter-service on  dev [✘?] via 🐍 v3.12.3 (venv) 
+❯ k logs counter-service-infinity-service-6746799879-vbpd5 -n prod 
+Successfully wrote value 0 to counter file /data/counter.txt
+Successfully read counter file /data/counter.txt
+ * Serving Flask app 'app.py'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.244.0.42:5000
+Press CTRL+C to quit
+10.244.0.1 - - [26/Nov/2024 12:07:31] "GET / HTTP/1.1" 200 -
+10.244.0.1 - - [26/Nov/2024 12:07:31] "GET / HTTP/1.1" 200 -
+
+counter-service on  dev [✘?] via 🐍 v3.12.3 (venv) 
+❯ k get pvc,pv -n prod 
+NAME                                   STATUS   VOLUME          CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/local-path-pvc   Bound    local-path-pv   128Mi      RWO            local-path     <unset>                 55s
+
+NAME                             CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                 STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+persistentvolume/local-path-pv   128Mi      RWO            Retain           Bound    prod/local-path-pvc   local-path     <unset>                          63s
+
+counter-service on  dev [✘?] via 🐍 v3.12.3 (venv) 
+❯
+```
+<br/>
+<br/>
+
+### Test persistent counter after pods are down :
+
+```bash
+counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ k get ing -n prod 
+NAME                               CLASS   HOSTS             ADDRESS     PORTS   AGE
+counter-service-infinity-service   nginx   counter-service   localhost   80      8m45s
+
+counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ curl counter-service/
+Our counter is: 0 
+counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ for i in {1..3}; do curl -X POST http://counter-service/; done
+Hmm, Plus 1 please Hmm, Plus 1 please Hmm, Plus 1 please 
+counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ curl counter-service/
+Our counter is: 3 
+counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ 
+```
+
+<br/>
+<br/>
+
+### Set replicas to 0 and then scale back to 1.
+
+```bash
+counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ helm upgrade --install counter-service k8s-deployment/infinity-service/   --values counter-service/deployment/values.yaml   --set image.tag="sha-f6caf4a" --set replicaCount=0   -n prod   --create-namespace &&  helm upgrade --install counter-service k8s-deployment/infinity-service/   --values counter-service/deployment/values.yaml   --set image.tag="sha-f6caf4a" --set r
+eplicaCount=1   -n prod   --create-namespace
+Release "counter-service" has been upgraded. Happy Helming!
+NAME: counter-service
+LAST DEPLOYED: Tue Nov 26 14:14:38 2024
+NAMESPACE: prod
+STATUS: deployed
+REVISION: 2
+NOTES:
+1. Get the application URL by running these commands:
+  http://counter-service/
+Release "counter-service" has been upgraded. Happy Helming!
+NAME: counter-service
+LAST DEPLOYED: Tue Nov 26 14:14:39 2024
+NAMESPACE: prod
+STATUS: deployed
+REVISION: 3
+NOTES:
+1. Get the application URL by running these commands:
+  http://counter-service/
+
+counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ k get pods -n prod 
+NAME                                                READY   STATUS        RESTARTS   AGE
+counter-service-infinity-service-6746799879-pxvjp   1/1     Running       0          5s
+counter-service-infinity-service-6746799879-vbpd5   1/1     Terminating   0          7m25s
+
+...
+
+counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ k get pods -n prod 
+NAME                                                READY   STATUS    RESTARTS   AGE
+counter-service-infinity-service-6746799879-pxvjp   1/1     Running   0          44s
+
+
+# Counter saved state 🥳🥳🥳 !!!
+counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ curl counter-service/
+Our counter is: 3 
+counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ 
+```
 
 
 
 
 
 
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 
 
