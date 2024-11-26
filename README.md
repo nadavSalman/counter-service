@@ -103,8 +103,51 @@ Terraform Architecture
 ```bash
 aws eks update-kubeconfig --region eu-west-2 --name infinity
 ```
---
+---
+## Deploymetn on Kind Cluster
 
+Test local storage (rancher.io/local-path )
+
+```bash
+on kind-kind counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+❯ k get pods,pvc,pv,sc  -n prod 
+NAME              READY   STATUS    RESTARTS   AGE
+pod/volume-test   1/1     Running   0          60s
+
+NAME                                   STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/local-path-pvc   Bound    pvc-d87d642a-cd53-4dda-ac4b-6081f0405579   128Mi      RWO            local-path     <unset>                 4d15h
+
+NAME                                                        CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                 STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+persistentvolume/pvc-d87d642a-cd53-4dda-ac4b-6081f0405579   128Mi      RWO            Delete           Bound    prod/local-path-pvc   local-path     <unset>                          4d15h
+
+NAME                                             PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+storageclass.storage.k8s.io/local-path           rancher.io/local-path   Delete          WaitForFirstConsumer   false                  4d16h
+storageclass.storage.k8s.io/standard (default)   rancher.io/local-path   Delete          WaitForFirstConsumer   false                  6d16h
+
+on kind-kind counter-service on  dev [✘!?] via 🐍 v3.12.3 (venv) 
+```
+
+
+### Persistent storage
+![alt text](images/image_05.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
 
 ### EKS Persistent storage for Maintaining County State 
 

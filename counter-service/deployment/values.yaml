@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: nadavdev/counter-service
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   tag: dev
 
 imagePullSecrets:
@@ -50,15 +50,15 @@ resources:
     cpu: 100m
     memory: 128Mi
 
-# volumes:
-#   - name: counter-volume
-#     persistentVolumeClaim:
-#       claimName: local-path-pvc
+volumes:
+  - name: counter
+    persistentVolumeClaim:
+      claimName: local-path-pvc
 
-# volumeMounts:
-#   - name: counter-volume
-#     mountPath: /app
-#     subPath: counter.txt
+volumeMounts:
+  - name: counter
+    mountPath: /data
+    # subPath: counter.txt
 
 nodeSelector: {}
 

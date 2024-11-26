@@ -4,9 +4,8 @@ metadata:
   name: local-path-pvc
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
+  storageClassName: local-path
   resources:
     requests:
       storage: 128Mi
-  storageClassName: local-path
-  volumeMode: Filesystem
