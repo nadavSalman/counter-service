@@ -5,7 +5,7 @@ from flask import current_app
 class CounterIOHandler:
     def __init__(self, file_name="counter.txt"):
         # self.file_path = os.path.join(os.getcwd(), file_name)
-        self.file_path = '/data'
+        self.file_path = f'/data/{file_name}'
         
         if not os.path.exists(self.file_path):
             self.write(0)  
